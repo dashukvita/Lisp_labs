@@ -3,7 +3,6 @@
 	(cond ((atom elem)
 	       (list elem)
 		  )
-		  ; здесь это уже список, проверим его длину
 		  ((eq (length elem) 1)
 			nil
 		  )
@@ -17,38 +16,38 @@
 )
 
 ; для сокращения последнего элемента
-(defun remove_last(L) ; итак, у нас последний элемент
-	(cond ((atom L) ; если это атом просто вернем его
-		   (list L) ; возвращаем как список, иначе потеряем скобки 
+(defun remove_last(L) 
+	(cond ((atom L) 
+		   (list L)
 		  )
-		  ((eq (length L) 1) ; если это знак уберем
+		  ((eq (length L) 1) 
 		   nil
 		  )
-		  ((eq (length L) 2) ; если чисоло со знаком, вернем число
+		  ((eq (length L) 2) 
 		   (cdr L)
 		  )
 		  (T
-		   (list (remove_1_2 L)) ; если это большой список - упростим
+		   (list (remove_1_2 L)) 
 		  )
 	)
 )
 
 ; убираем списки неправильной длины // на вход идет все выражение
 (defun remove_1_2(L)
-	(cond ((null (cdr L))              ; дошли до последнего элемента
-		   (remove_last (car L))       ; обрабатываем его в функции remove_last
+	(cond ((null (cdr L))              
+		   (remove_last (car L))      
 		  )
-		  ((atom (car L)) ; тут уже не последний элемент, так что смотрим на первый, если это атом, то вставляем его
+		  ((atom (car L)) 
 		   (cons (car L) (remove_1_2 (cdr L)))
 		  )
-		  ((eq (length (car L)) 1) ; если это вида (+) - убираем
+		  ((eq (length (car L)) 1) 
 		   (remove_1_2 (cdr L))
 		  )
-		  ((eq (length (car L)) 2) ;  усли это вида (+ 1) - оставляем только число
+		  ((eq (length (car L)) 2) 
 		   (cons (cadar L) (remove_1_2 (cdr L)))
 		  )
 		  (T
-		   (cons (remove_1_2 (car L)) (remove_1_2 (cdr L))) ; если первый элемент - нормальный список (> 3), то упрощаем и его и хвост
+		   (cons (remove_1_2 (car L)) (remove_1_2 (cdr L))) 
 		  )
 	)
 )
@@ -57,17 +56,13 @@
 	(cond ((null L)
 		   nil
 		  )
-		  ((atom L) ; для деления
+		  ((atom L) 
 		   nil
 		  )
-		  ((eq (car L) 0) ; проверяем есть ли нули
+		  ((eq (car L) 0) 
 		   T
 		  )
-		  ; old version
-		  ;((atom (car L)) ; если это атом (не ноль), то проверяем хвост
-		   ;(if_need_simplify (cdr L))
-		  ;)
-		  ((atom (car L)) ; если это атом (не ноль), то проверяем хвост , но сначала поработаем с делением
+		  ((atom (car L)) 
 		   (cond ((eq (car L) '/)
 					(cond ((eq (caddr L) 1)
 							T
@@ -82,48 +77,46 @@
 				 )
 		   )		   
 		  )
-		  ((< (length (car L)) 3) ; если уже соответственно не атом, то смотрим на его длину, если меньше 3, надо упрощать
+		  ((< (length (car L)) 3)
 		   T
 		  )
-		  ; это проверка для деления на 1
 		  ((eq (car L) '/)
 		   (cond ((eq (caddr L) 1)
 				  T
 				 )
 		   )
 		  )
-		  ((if_need_simplify (car L)) ; теперь лезем в голову, если надо упростить ее, то все нужно упростить
+		  ((if_need_simplify (car L)) 
 		   T
 		  )
-		  (T ; с первым элементом все хорошо, идем дальше
+		  (T 
 		   (if_need_simplify (cdr L))
 		  )
 	)
 )
 
-; убирает elem из списка L
 (defun remove_elem(elem L)
     (let ((first_elem (car L))
           (tail (cdr L))
          )
          
-         (cond ((null tail)                       ; если хвост пуст - разберемся с первым элементом
-                (cond ((eq first_elem elem) nil)  ; если это искомый элемент, то удалим
-                      ((atom first_elem)          ; если другой атом - вернем его
+         (cond ((null tail)                       
+                (cond ((eq first_elem elem) nil) 
+                      ((atom first_elem)          
                        (list first_elem)
                       )
-                      (T (list (simplify first_elem))) ; если оказался списком - то упрощаем дальше
+                      (T (list (simplify first_elem))) 
                 )               
                )
-               ((eq first_elem elem) (remove_elem elem tail) ; если хвост есть и первый элемент искомый - удаляем его и ищем дальше в хвосте
+               ((eq first_elem elem) (remove_elem elem tail) 
                )
                ((atom first_elem) 
-                (cons first_elem (remove_elem elem tail) ; если первый другой атом, вставляем его в рекурсивный вызов для хвоста
+                (cons first_elem (remove_elem elem tail) 
                 )
                )
                (T 
                 (cons (simplify first_elem)
-                        (remove_elem elem tail) ; если первый эелемент - список, и хвост есть, то упрощаем первый и рекурсивно удаляем искомый элемент из хвоста
+                        (remove_elem elem tail) 
                 )
                )
          )
@@ -135,26 +128,17 @@
 	(cond ((null L)
 		   nil
 		  )
-		  ((atom (car L)) ; если первый элемент  - атом
-		   (cond ((eq (car L) 0) ; если это 0, вернем тру
+		  ((atom (car L)) 
+		   (cond ((eq (car L) 0) 
 				  T
 				 )
-				 (T               ; если не 0, проверим хвост 
+				 (T               
 				  (if_zero (cdr L))
 				 )
 		   )
 		  )
-		  (T ; если первый элемент - список
-		  ; список - это не 0!
-		  ; поэтому просто проверим хвост!
+		  (T 
 		  (if_zero (cdr L))
-		   ;(cond ((if_zero (car L)) ; проверим этот список, если там есть 0, вернем тру
-			;	  T
-			;	 )
-			;	 (T ; если в этом списке нет 0, проверим хвост
-			;	  (if_zero (cdr L))
-			;	 )
-		   ;)
 		  )
 	)
 )
@@ -163,21 +147,21 @@
 	(let ((znak (car L))) ; делаем аналог switch-case
 		
 		(cond ((eq znak '+)
-			   (cons znak (remove_elem 0 (cdr L))) ; передаем слагаемые и удаляем нули из них
+			   (cons znak (remove_elem 0 (cdr L))) 
 			  )
 			  ((eq znak '-)
-			   (cons znak (remove_elem 0 (cdr L))) ; передаем слагаемые и удаляем нули из них
+			   (cons znak (remove_elem 0 (cdr L))) 
 			  )
 			  ((eq znak '*)
-				(cond ((if_zero (cdr L)) ; если во множителях встречен 0, вернем 0
+				(cond ((if_zero (cdr L))
 					   '0
 				      )
-				      (T ; если 0 нет
-					   (cond ((eq (remove_elem 1 (cdr L)) nil) ; если все множители это 1, то вернем
+				      (T 
+					   (cond ((eq (remove_elem 1 (cdr L)) nil)
 							  '1
 							 )
 							 (T
-							  (cons znak (remove_elem 1 (cdr L))) ; удалим единицы из множителей
+							  (cons znak (remove_elem 1 (cdr L))) 
 							 )
 					   )					   
 				      ) 
@@ -204,39 +188,37 @@
 ; если делимое 0 - вернем 0
 ; если делим на 1 - вернем делимое
 
-; критические значения проверены, теперь нужно обработать отдельные случаи, так как упрощать можно только списки
-; если кто-то список, упрощаем его
 (defun delenie(L)
-	(let ((delimoe (cadr L)) ; берем делимое
-	      (delitel (caddr L)) ; берем делитель
+	(let ((delimoe (cadr L))
+	      (delitel (caddr L)) 
 		 )
 		 
-		 (cond ((eq delitel 0) ; сначала проверяем критические значения делимого и делителя
+		 (cond ((eq delitel 0) 
 				'(На ноль делить нельзя!)
 			   )
 			   ((eq delimoe 0)
 			    (list '/ 0)
 			   )
-			   ((atom delimoe) ; теперь посмотрим на дедимое, его нельзя сразу передать в simplify, если это атом, то не сработает 
+			   ((atom delimoe)
 			    (cond ((eq delitel 1)
 						(list '/ delimoe)
 					  )
-					  ((atom delitel) ; делимое и делитель атомы, отличные от критических
+					  ((atom delitel) 
 					   (cons '/ (cons delimoe (list delitel)))
 					  )
-					  (T ; делимое атом, делитель список
+					  (T 
 					   (cons '/ (cons delimoe (list (simplify delitel))))
 					  )
 				)
 			   )			   
-			   (T ; делимое список
+			   (T 
 			    (cond ((eq delitel 1)
 						(list '/ (simplify delimoe))
 					  )
-					  ((atom delitel) ; делитель атом
+					  ((atom delitel) 
 					   (cons '/ (cons (simplify delimoe) (list delitel)))
 					  )
-					  (T ; делимое и делитель списки
+					  (T 
 					   (let ((simpleDelimoe (simplify delimoe))
 							 (simpleDelitel (simplify delitel))
 							)
@@ -252,7 +234,7 @@
 
 ; если на выходе из simplify_excpresion получили (+) или (+ 1), то упростим
 (defun if_it_simple_make_it_better(L)
-	(cond ((eq (length L) 1) ; это значит, что мы упростили до знака
+	(cond ((eq (length L) 1) 
 			'0
 		  )
 		  ((eq (length L) 2)
@@ -272,26 +254,9 @@
 (print (if_it_simple_make_it_better '(+ 1)) )
 (print '(if_it_simple_make_it_better test-----------------------------------------------))
 
-
-; основная функция - работает следующим образом:
-; упрощает выражение(simplify): 
-; - для +- удаляет 0;
-; - для *:
-;   -если в нем есть 0 элемент, то вернет 0, вместо всего произведения
-;   - если есть 1, то уберет их, если только единицы вернет вместо всего произведения 1
-; вот так действует simplify: (+ 1 0 (- 0 2) (* 0 2) (* 1 2)) -> (+ 1 (- 2) 0 (* 2))
-; после упрощения выражения применяем функцию (remove_1_2),
-; которая убирает такие скобки (+), а вместо таких (+ 1) возвращает 1
-; вот так действует remove_1_2: (+ 1 (- 2) 0 (* 2)) -> (+ 1 2 0 2)
-
-; деление работает если там 2 аргумента, а также отработает случаи с 0 и 1
-
-; как видно, такое выражение требует повторного упрощения
-; поэтому есть функция if_need_simplify, которая вернет тру если в выражении есть 0 и списки длиной 1(+) и 2(+ 1), а также дополнительное условие для деления
-; тогда все повториться снова, пока выражение не будет упрощенно и функция if_need_simplify не вернет nil.
 (defun simplify_excpresion(L)
-	(let ((s_exp (remove_1_2 (simplify L)))) ; упрощаем и удаляем лишние элементы
-		(cond ((if_need_simplify s_exp)      ; если нужно упростить еще, упрощаем еще
+	(let ((s_exp (remove_1_2 (simplify L)))) 
+		(cond ((if_need_simplify s_exp)     
 			   (simplify_excpresion s_exp)
 			  )
 			  (T
@@ -300,7 +265,7 @@
 		)
 	)
 )
-
+;  проверки
 (print '//////////////////////////////////////////////////////////////////////////////////////////////////////////)
 (print '(simplify_excpresion test-----------------------------------------------))
 (print '(need (+ (- 2 1) 1)))
@@ -323,7 +288,7 @@
 (print (simplify_excpresion '(+ a b (* b  (/ (* 5 0) (+ 2 5))  b) ) ))
 (print '(simplify_excpresion test-----------------------------------------------))
 
-(print '(тесты от Иры))
+(print '(тесты))
 (print (simplify_excpresion '(+ (/ a 0) (* b (+ b 0))) ))
 (print (simplify_excpresion '(+ (* a (+ b 0)) (/ 0 (+ a b))) ))
 (print (simplify_excpresion '(+ (/ a 0) 1) ))
