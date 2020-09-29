@@ -13,7 +13,7 @@ padding-left:10px">
 <p>8. Функция <a href="https://github.com/dashukvita/Lisp_labs/blob/master/depth.lsp">Depth(L)</a>, вычисляющую глубину списка L, т.е. максимальное количество уровней в нём.</p>
 <p>9. Функция <a href="https://github.com/dashukvita/Lisp_labs/blob/master/subst.lsp">Subst(A L E)</a>, заменяющая в произвольном списочном выражении L на всех его уровнях все вхождения атома А на выражение Е.</p>
 <p>10. Функция <a href="https://github.com/dashukvita/Lisp_labs/blob/master/trans.lsp">Trans(N S)</a>, которая упрощает структуру списочного выражения S, заменяя в нём все списочные элементы, находящиеся на уровне N (N&gt;=1), на (X) </p>
-<p>11. Функция<a href="https://github.com/dashukvita/Lisp_labs/blob/master/simplify.lsp">simplify</a>, которая упрощает
+<p>11. Функция <a href="https://github.com/dashukvita/Lisp_labs/blob/master/simplify.lsp">simplify</a>, которая упрощает
 выражения (c операциями +,-,/,*).
-<br>Например выражение a+b+b*(c+0)*b+(b+f)*0
-<br>можно представить лисповским списком: (+ a b (* b (+ c 0) b) (*(+ b f ) 0) )
+<br>   Например выражение a+b+b*(c+0)*b+(b+f)*0
+<br>   можно представить лисповским списком: (+ a b (* b (+ c 0) b) (*(+ b f ) 0) )
